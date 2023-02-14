@@ -39,6 +39,18 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+  getProduct: {
+    handler: 'src/functions/getProduct/index.handler',
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'product/{productId}',
+          cors: corsSettings,
+        },
+      },
+    ],
+  },
 };
 
 export default functions;
