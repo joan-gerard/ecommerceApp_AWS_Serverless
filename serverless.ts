@@ -15,9 +15,9 @@ const serverlessConfiguration: AWS = {
       ordersTable: '${sls:stage}-${self:service}-orders-table',
     },
     profile: {
-      dev: 'dev-profile',
-      int: 'int-profile',
-      prod: 'prod-profile',
+      dev: 'serverlessUser',
+      int: 'int-serverlessUser',
+      prod: 'prod-serverlessUser',
     },
     esbuild: {
       bundle: true,
