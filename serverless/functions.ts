@@ -64,6 +64,28 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+  streamHandler: {
+    handler: 'src/functions/streamHandler/index.handler',
+    events: [
+      {
+        stream: {
+          type: 'dynamodb',
+          arn: {
+            'Fn::GetAtt': ['OrdersTable', 'StreamArn'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['events:PutEvents'],
+        Resource:
+          'arn:aws:events:${self:provider.region}:${aws:accountId}:event-bus/${self:custom.eventBridgeBusName}',
+      },
+    ],
+  },
 };
 
 export default functions;

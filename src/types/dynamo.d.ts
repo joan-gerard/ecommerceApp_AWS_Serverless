@@ -19,7 +19,7 @@ export interface ProductsRecord {
 
 type Timestamp = number;
 
-export type OrderStatus = 'placed' | 'packed' | 'being delivered' | 'error';
+export type OrderStatus = 'placed' | 'packed' | 'delivered' | 'error';
 export interface OrderRecord {
   id: string;
   pk: string;
