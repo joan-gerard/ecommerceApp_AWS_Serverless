@@ -1,0 +1,66 @@
+import { EventBridgeEvent } from 'aws-lambda';
+
+import Dynamo from '@libs/Dynamo';
+import { OrderRecord, ProductsRecord } from 'src/types/dynamo';
+import SES from '@libs/SES';
+
+export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) => {
+  try {
+    const productTable = process.env.productTable;
+
+    //from here...
+    console.log({ event, itemDetails: event.detail.items });
+
+    const orderDetails = event.detail;
+
+    const orderItemsPromise = orderDetails.items.map(async (item) => {
+      const itemData = await Dynamo.get<ProductsRecord>({
+        tableName: productTable,
+        pkValue: item.id,
+      });
+
+      console.log({ itemData, SIZES: itemData.sizesAvailable });
+
+      return {
+        count: item.count,
+        title: itemData.title,
+        size: itemData.sizesAvailable.filter((size) => size.sizeCode == item.size)[0],
+      };
+    });
+
+    const itemsDetails = await Promise.all(orderItemsPromise);
+
+    // ... to here!!!
+    console.log({ itemsDetails });
+
+    await SES.sendEmail({
+      email: orderDetails.userEmail,
+      subject: 'Your order has been placed',
+      text: `Thank you for placing your order. We're preparing it at our warehouse.
+      
+Order Summary: 
+${itemsDetails.map(itemToRow)}
+
+We'll let you know when that has been shipped!
+`,
+    });
+
+    console.log('email sent');
+    return;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+const itemToRow = ({
+  count,
+  size,
+  title,
+}: {
+  count: number;
+  title: string;
+  size?: { sizeCode: number; displayValue: string };
+}) => {
+  return `${count} x ${title} ${size ? `in size ${size.displayValue}` : null}
+`;
+};

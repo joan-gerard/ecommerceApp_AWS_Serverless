@@ -86,6 +86,28 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+  ebOrderPlacedCustomerNotification: {
+    handler: 'src/functions/ebOrderPlacedCustomerNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBridgeBusName}',
+          pattern: {
+            source: ['order.placed'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
+      },
+    ],
+  },
 };
 
 export default functions;

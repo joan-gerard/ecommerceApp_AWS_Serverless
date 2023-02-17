@@ -13,6 +13,7 @@ const eventBridgeBusName = process.env.eventBridgeBusName;
 
 export const handler = async (event: DynamoDBStreamEvent) => {
   try {
+    console.log({ event, records: event.Records });
     const ebEvents = event.Records.map((record) => {
       if (!record?.dynamodb?.NewImage) {
         return;

@@ -11,7 +11,7 @@ export interface ProductsRecord {
   title: string;
   description: string;
   colour: string;
-  sizeAvailable?: {
+  sizesAvailable?: {
     sizeCode: number;
     displayValue: string;
   }[];
@@ -20,6 +20,7 @@ export interface ProductsRecord {
 type Timestamp = number;
 
 export type OrderStatus = 'placed' | 'packed' | 'delivered' | 'error';
+
 export interface OrderRecord {
   id: string;
   pk: string;
