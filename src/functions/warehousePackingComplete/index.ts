@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { v4 as uuid } from 'uuid';
 
 import { formatJSONResponse } from '@libs/APIResponses';
 import Dynamo from '@libs/Dynamo';
