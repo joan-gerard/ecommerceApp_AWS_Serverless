@@ -26,6 +26,12 @@ const authorizer: Authorizer = {
   arn: { 'Fn::GetAtt': ['CognitoUserPool', 'Arn'] },
 };
 
+const iamGetSecret = {
+  Effect: 'Allow',
+  Action: ['secretsmanager:GetSecretValue'],
+  Resource: '*',
+};
+
 const functions: AWS['functions'] = {
   getProducts: {
     handler: 'src/functions/getProducts/index.handler',
@@ -121,13 +127,22 @@ const functions: AWS['functions'] = {
       },
     ],
     //@ts-expect-error
-    iamRoleStatements: [
+    iamRoleStatements: [iamGetSecret],
+  },
+  warehousePackingComplete: {
+    handler: 'src/functions/warehousePackingComplete/index.handler',
+    events: [
       {
-        Effect: 'Allow',
-        Action: ['secretsmanager:GetSecretValue'],
-        Resource: '*',
+        http: {
+          method: 'post',
+          path: 'orderpacked/{orderId}',
+          cors: corsSettings,
+        },
       },
     ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [iamGetSecret],
   },
 };
 

@@ -28,7 +28,7 @@ export interface OrderRecord {
 
   userId: string;
   userEmail: string;
-  dataCreated: Timestamp;
+  dateCreated: Timestamp;
   dateUpdated?: Timestamp;
   status: OrderStatus;
 

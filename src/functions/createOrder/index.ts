@@ -22,7 +22,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
 
       userId,
       userEmail,
-      dataCreated: timestamp,
+      dateCreated: timestamp,
       status: 'placed',
 
       items: order.items,
