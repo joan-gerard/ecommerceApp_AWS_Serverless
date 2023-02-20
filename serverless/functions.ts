@@ -108,6 +108,27 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+  ebOrderPlacedWarehouseNotification: {
+    handler: 'src/functions/ebOrderPlacedWarehouseNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBridgeBusName}',
+          pattern: {
+            source: ['order.placed'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['secretsmanager:GetSecretValue'],
+        Resource: '*',
+      },
+    ],
+  },
 };
 
 export default functions;
