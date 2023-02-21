@@ -12,9 +12,17 @@ const SecretsConfig: AWS['resources']['Resources'] = {
   orderpackedApiKeys: {
     Type: 'AWS::SecretsManager::Secret',
     Properties: {
-      Description: 'API key pased by the warehouse',
+      Description: 'API key passed by the warehouse',
       Name: 'auth-/orderpacked/_orderId_',
       SecretString: '${env:orderpackedApiKeys}',
+    },
+  },
+  deliveryApiKeys: {
+    Type: 'AWS::SecretsManager::Secret',
+    Properties: {
+      Description: 'API key passed by the delivery service',
+      Name: 'auth-/orderpicked/_orderId_',
+      SecretString: '${env:deliveryApiKeys}',
     },
   },
 };

@@ -44,8 +44,9 @@ export const handler = async (event: DynamoDBStreamEvent) => {
 
 const recordToEvent = (record: DynamoDBStreamEvent['Records'][0]) => {
   const statusToSource = {
-    placed: 'order.placed',
-    packed: 'order.packed',
+    order_placed: 'order.order_placed',
+    warehouse_packed: 'order.warehouse_packed',
+    being_delivered: 'order.being_delivered',
     delivered: 'order.delivered',
     error: 'order.error',
   };

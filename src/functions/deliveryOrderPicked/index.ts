@@ -40,8 +40,8 @@ export const handler = async (event: APIGatewayProxyEvent) => {
 
     const updatedOrder: OrderRecord = {
       ...order,
-      status: 'warehouse_packed',
-      warehousePacked: Date.now(),
+      status: 'being_delivered',
+      deliveryPicked: Date.now(),
     };
 
     console.log({ updatedOrder });
@@ -52,7 +52,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     });
 
     return formatJSONResponse({
-      body: { message: 'Order has been packed' },
+      body: { message: 'Order has been picked by delivery partner' },
     });
   } catch (error) {
     console.log('error', error);

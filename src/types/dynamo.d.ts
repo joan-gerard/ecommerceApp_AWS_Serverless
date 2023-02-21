@@ -19,7 +19,12 @@ export interface ProductsRecord {
 
 type Timestamp = number;
 
-export type OrderStatus = 'placed' | 'packed' | 'delivered' | 'error';
+export type OrderStatus =
+  | 'order_placed'
+  | 'warehouse_packed'
+  | 'being_delivered'
+  | 'delivered'
+  | 'error';
 
 export interface OrderRecord {
   id: string;
@@ -28,8 +33,9 @@ export interface OrderRecord {
 
   userId: string;
   userEmail: string;
-  dateCreated: Timestamp;
-  dateUpdated?: Timestamp;
+  orderCreated: Timestamp;
+  warehousePacked?: Timestamp;
+  deliveryPicked?: Timestamp;
   status: OrderStatus;
 
   items: {

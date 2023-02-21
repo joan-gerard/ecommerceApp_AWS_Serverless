@@ -99,7 +99,7 @@ const functions: AWS['functions'] = {
         eventBridge: {
           eventBus: '${self:custom.eventBridgeBusName}',
           pattern: {
-            source: ['order.placed'],
+            source: ['order.order_placed'],
           },
         },
       },
@@ -121,7 +121,7 @@ const functions: AWS['functions'] = {
         eventBridge: {
           eventBus: '${self:custom.eventBridgeBusName}',
           pattern: {
-            source: ['order.placed'],
+            source: ['order.order_placed'],
           },
         },
       },
@@ -151,7 +151,7 @@ const functions: AWS['functions'] = {
         eventBridge: {
           eventBus: '${self:custom.eventBridgeBusName}',
           pattern: {
-            source: ['order.packed'],
+            source: ['order.warehouse_packed'],
           },
         },
       },
@@ -173,12 +173,49 @@ const functions: AWS['functions'] = {
         eventBridge: {
           eventBus: '${self:custom.eventBridgeBusName}',
           pattern: {
-            source: ['order.packed'],
+            source: ['order.warehouse_packed'],
           },
         },
       },
     ],
     // iamRoleStatements: [iamGetSecret],
+  },
+  deliveryOrderPicked: {
+    handler: 'src/functions/deliveryOrderPicked/index.handler',
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'orderpicked/{orderId}',
+          cors: corsSettings,
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [iamGetSecret],
+  },
+  ebOrderPickedCustomerNotification: {
+    handler: 'src/functions/ebEvents/ebOrderPickedCustomerNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBridgeBusName}',
+          pattern: {
+            source: ['order.being_delivered'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
+      },
+    ],
   },
 };
 
