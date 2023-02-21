@@ -35,13 +35,13 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
 
     await SES.sendEmail({
       email: orderDetails.userEmail,
-      subject: 'Your order has been placed',
-      text: `Thank you for placing your order. We're preparing it at our warehouse.
+      subject: 'Your order has been packed',
+      text: `This is to let you know that the warehouse has completed packing the following order.
       
 Order Summary: 
 ${itemsDetails.map(itemToRow)}
 
-We'll let you know when the order has been packed!
+We'll let you know when the order has been picked by our delivery partner!
 `,
     });
 

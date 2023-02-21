@@ -144,6 +144,42 @@ const functions: AWS['functions'] = {
     iamRoleStatementsInherit: true,
     iamRoleStatements: [iamGetSecret],
   },
+  ebOrderPackedCustomerNotification: {
+    handler: 'src/functions/ebEvents/ebOrderPackedCustomerNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBridgeBusName}',
+          pattern: {
+            source: ['order.packed'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
+      },
+    ],
+  },
+  ebOrderPackedDeliveryNotification: {
+    handler: 'src/functions/ebEvents/ebOrderPackedDeliveryNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBridgeBusName}',
+          pattern: {
+            source: ['order.packed'],
+          },
+        },
+      },
+    ],
+    // iamRoleStatements: [iamGetSecret],
+  },
 };
 
 export default functions;
