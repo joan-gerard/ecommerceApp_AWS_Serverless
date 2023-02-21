@@ -93,7 +93,7 @@ const functions: AWS['functions'] = {
     ],
   },
   ebOrderPlacedCustomerNotification: {
-    handler: 'src/functions/ebOrderPlacedCustomerNotification/index.handler',
+    handler: 'src/functions/ebEvents/ebOrderPlacedCustomerNotification/index.handler',
     events: [
       {
         eventBridge: {
@@ -115,7 +115,7 @@ const functions: AWS['functions'] = {
     ],
   },
   ebOrderPlacedWarehouseNotification: {
-    handler: 'src/functions/ebOrderPlacedWarehouseNotification/index.handler',
+    handler: 'src/functions/ebEvents/ebOrderPlacedWarehouseNotification/index.handler',
     events: [
       {
         eventBridge: {

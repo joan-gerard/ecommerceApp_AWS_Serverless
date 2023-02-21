@@ -36,7 +36,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     });
 
     return formatJSONResponse({
-      body: { message: 'Order placed' },
+      body: { message: `Order placed --> ${fullOrder.id}` },
     });
   } catch (error) {
     console.log('error', error);
