@@ -13,20 +13,15 @@ const eventBridgeBusName = process.env.eventBridgeBusName;
 
 export const handler = async (event: DynamoDBStreamEvent) => {
   try {
-    console.log({ event, records: event.Records });
     const ebEvents = event.Records.map((record) => {
       if (!record?.dynamodb?.NewImage) {
         return;
       }
 
-      console.log({ record, image: record.dynamodb.NewImage });
-
       const event = recordToEvent(record);
 
       return event;
     });
-
-    console.log({ ebEvents });
 
     const params: PutEventsCommandInput = {
       Entries: ebEvents,
@@ -36,7 +31,6 @@ export const handler = async (event: DynamoDBStreamEvent) => {
 
     const response = await client.send(command);
 
-    console.log({ response });
   } catch (error) {
     console.log('error', error);
   }

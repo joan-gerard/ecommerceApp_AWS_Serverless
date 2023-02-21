@@ -22,14 +22,10 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     const ordersTable = process.env.ordersTable;
     const orderId = event.pathParameters.orderId;
 
-    console.log({ ordersTable, orderId });
-
     const order = await Dynamo.get<OrderRecord>({
       tableName: ordersTable,
       pkValue: orderId,
     });
-
-    console.log({ order });
 
     if (!order || !order.id) {
       return formatJSONResponse({
@@ -43,8 +39,6 @@ export const handler = async (event: APIGatewayProxyEvent) => {
       status: 'warehouse_packed',
       warehousePacked: Date.now(),
     };
-
-    console.log({ updatedOrder });
 
     await Dynamo.write({
       data: updatedOrder,

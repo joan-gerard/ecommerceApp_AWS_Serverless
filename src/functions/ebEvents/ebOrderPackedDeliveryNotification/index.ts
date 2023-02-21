@@ -9,8 +9,6 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
     const orderDetails = event.detail;
 
     // const authkey = await Secrets.getSecret('warehouseApiKey');
-    // console.log({ event, orderDetails, authkey });
-    console.log({ event, orderDetails });
 
     await axios.post(
       'https://httpstat.us/201',

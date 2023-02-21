@@ -8,9 +8,6 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
   try {
     const productTable = process.env.productTable;
 
-    //from here...
-    console.log({ event, itemDetails: event.detail.items });
-
     const orderDetails = event.detail;
 
     const orderItemsPromise = orderDetails.items.map(async (item) => {
@@ -18,8 +15,6 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
         tableName: productTable,
         pkValue: item.id,
       });
-
-      console.log({ itemData, SIZES: itemData.sizesAvailable });
 
       return {
         count: item.count,
@@ -29,9 +24,6 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
     });
 
     const itemsDetails = await Promise.all(orderItemsPromise);
-
-    // ... to here!!!
-    console.log({ itemsDetails });
 
     await SES.sendEmail({
       email: orderDetails.userEmail,

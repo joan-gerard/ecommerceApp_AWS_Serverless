@@ -28,8 +28,6 @@ export const handler = async (event: APIGatewayProxyEvent) => {
       items: order.items,
     };
 
-    console.log({ userId, userEmail, fullOrder, items: fullOrder.items });
-
     await Dynamo.write({
       data: fullOrder,
       tableName: ordersTable,
