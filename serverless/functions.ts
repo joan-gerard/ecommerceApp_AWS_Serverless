@@ -33,6 +33,17 @@ const iamGetSecret = {
 };
 
 const functions: AWS['functions'] = {
+  cronJob: {
+    handler: 'src/functions/cronJob/index.handler',
+    events: [
+      {
+        schedule: {
+          rate: ['cron(*/5 * * * ? *)'],
+          enabled: true
+        },
+      },
+    ],
+  },
   getProducts: {
     handler: 'src/functions/getProducts/index.handler',
     events: [
