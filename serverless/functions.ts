@@ -38,8 +38,8 @@ const functions: AWS['functions'] = {
     events: [
       {
         schedule: {
-          rate: ['cron(*/5 * * * ? *)'],
-          enabled: true
+          rate: ['cron(*/3 * * * ? *)'],
+          enabled: true,
         },
       },
     ],

@@ -1,8 +1,8 @@
-import seedDataGenerator from './generateProductJson';
+// import seedDataGenerator from './generateProductJson';
 import * as AWS from 'aws-sdk';
 
 const saveToDynamo = async ({ data, tableName }: { data: any[]; tableName: string }) => {
-  const env = process.env.environment;
+  const env = 'dev';
 
   if (!env) {
     throw Error('missing environemnt parameter');
@@ -15,8 +15,10 @@ const saveToDynamo = async ({ data, tableName }: { data: any[]; tableName: strin
   }[env];
 
   if (!profile) {
-    throw Error('incorrect environemnt parameter');
+    throw Error('incorrect environment parameter');
   }
+
+  console.log({ data, tableName, profile });
 
   await batch({
     data,
@@ -34,18 +36,19 @@ const batch = async ({
   tableName: string;
   profile: string;
 }) => {
-  console.log('deploy seed', { data, tableName, profile });
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({
-    profile,
-  });
+  // AWS.config.credentials = new AWS.SharedIniFileCredentials({
+  //   profile,
+  // });
   const config = {
     region: 'eu-central-1',
     convertEmptyValues: true,
   };
-  console.log('credentials', AWS.config.credentials);
 
+  // console.log('batch', AWS.config.credentials);
   const documentClient = new AWS.DynamoDB.DocumentClient(config);
+  console.log({ documentClient });
 
+  // const newData = 
   const formattedRecords = data.map((record) => {
     return {
       PutRequest: {
@@ -53,7 +56,7 @@ const batch = async ({
       },
     };
   });
-
+  console.log({ formattedRecords });
   try {
     while (formattedRecords.length > 0) {
       const batch = formattedRecords.splice(0, 15);
@@ -76,13 +79,9 @@ const batch = async ({
   }
 };
 
-const deployToAWS = async () => {
-  const records = seedDataGenerator();
-
+export const deployToAWS = async (data) => {
   await saveToDynamo({
-    data: records,
-    tableName: `${process.env.environment}-ecom-app-product-table`,
+    data,
+    tableName: `dev-ecom-app-product-table`,
   });
 };
-
-deployToAWS();
