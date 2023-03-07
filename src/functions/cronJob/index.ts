@@ -10,14 +10,17 @@ export const handler = async () => {
   console.log('CRON JOB START');
 
   const productsQuery = '*[_type == "product"]';
-  const products: any[] = await client.fetch(productsQuery);
-  console.log({ products });
+  const sanityProducts: any[] = await client.fetch(productsQuery);
+  console.log({ sanityProducts });
 
   // FORMAT DATA
-  const results = formatData(products);
+  const sanityResults = formatData(sanityProducts);
+
+  // GET EXISTING DATA
+  
 
   // DEPLOY TO AWS
-  deployToAWS(results);
+  deployToAWS(sanityResults);
 
   console.log('CRON JOB ENDED');
 };

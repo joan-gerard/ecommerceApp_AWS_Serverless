@@ -11,38 +11,52 @@ export const handler = async (event: APIGatewayProxyEvent) => {
 
     const { group, category, subcategory } = event.queryStringParameters || {};
 
-    if (!group) {
+    // if (!group) {
+    //   return formatJSONResponse({
+    //     statusCode: 400,
+    //     body: {
+    //       message: "missing 'group' query string parameter",
+    //     },
+    //   });
+    // }
+
+    if (group) {
+      let sk = undefined;
+
+      if (category) {
+        sk = category;
+
+        if (subcategory) {
+          sk = `${category}#${subcategory}`;
+        }
+      }
+
+      const productsResponse = await Dynamo.query<ProductsRecord>({
+        tableName: productTable,
+        index: 'index1',
+        pkValue: group,
+        skBeginsWith: sk,
+        skKey: sk ? 'sk' : undefined,
+      });
+
+      const productsData = productsResponse.map(({ pk, sk, ...rest }) => rest);
+
       return formatJSONResponse({
-        statusCode: 400,
-        body: {
-          message: "missing 'group' query string parameter",
-        },
+        body: productsData,
       });
     }
 
-    let sk = undefined;
+    if (!group) {
+      const productsResponse = await Dynamo.scan({
+        tableName: productTable,
+      });
 
-    if (category) {
-      sk = category;
+      const productsData = productsResponse.map(({ pk, sk, ...rest }) => rest);
 
-      if (subcategory) {
-        sk = `${category}#${subcategory}`;
-      }
+      return formatJSONResponse({
+        body: productsData,
+      });
     }
-
-    const productsResponse = await Dynamo.query<ProductsRecord>({
-      tableName: productTable,
-      index: 'index1',
-      pkValue: group,
-      skBeginsWith: sk,
-      skKey: sk ? 'sk' : undefined,
-    });
-
-    const productsData = productsResponse.map(({ pk, sk, ...rest }) => rest);
-
-    return formatJSONResponse({
-      body: productsData,
-    });
   } catch (error) {
     console.log('error', error);
     return formatJSONResponse({

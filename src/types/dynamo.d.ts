@@ -1,20 +1,21 @@
 type ProductId = string;
-type ProductGroup = 'clothing' | 'climbing' | 'cycling';
+type ProductGroup = 'electronics' | 'test';
 type Category = string;
 type Subcategory = string;
 
 export interface ProductsRecord {
   id: ProductId;
-  pk: ProductGroup;
-  sk: `${Category}#${Subcategory}#${ProductId}`;
-
   title: string;
+  brand: string | null;
   description: string;
-  colour: string;
+  colour?: string;
   sizesAvailable?: {
     sizeCode: number;
     displayValue: string;
   }[];
+
+  pk?: ProductGroup;
+  sk?: `${Category}#${ProductId}`;
 }
 
 type Timestamp = number;

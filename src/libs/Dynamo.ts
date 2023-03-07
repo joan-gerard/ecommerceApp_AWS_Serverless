@@ -11,6 +11,8 @@ import {
   QueryCommandInput,
   UpdateCommand,
   UpdateCommandInput,
+  ScanCommand,
+  ScanCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 
 const ddbClient = new DynamoDBClient({});
@@ -178,6 +180,12 @@ const Dynamo = {
     }
 
     const command = new QueryCommand(params);
+    const res = await ddbClient.send(command);
+
+    return res.Items as T[];
+  },
+  scan: async <T = Item>({ tableName }: { tableName: string }) => {
+    const command = new ScanCommand({ TableName: tableName });
     const res = await ddbClient.send(command);
 
     return res.Items as T[];

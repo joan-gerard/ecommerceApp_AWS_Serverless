@@ -1,11 +1,13 @@
+import { ProductsRecord } from "src/types/dynamo";
+
 const formatData = (sampleData) => {
   console.log('FORMAT DATA START');
-  const records: any[] = [];
+  const records: ProductsRecord[] = [];
 
 
   sampleData.map((item) => {
 
-    const newItem = {
+    const newItem: ProductsRecord = {
       id: item._id,
       title: item.name,
       brand: null,
