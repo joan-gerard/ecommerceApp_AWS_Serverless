@@ -20,6 +20,13 @@ export interface ProductsRecord {
 
 type Timestamp = number;
 
+export interface Order {
+  items: {
+    id: string;
+    count: number;
+  }[];
+}
+
 export type OrderStatus =
   | 'order_placed'
   | 'warehouse_packed'

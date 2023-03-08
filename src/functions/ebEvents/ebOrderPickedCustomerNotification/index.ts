@@ -46,13 +46,11 @@ We wish you a great reception of your order!
 
 const itemToRow = ({
   count,
-  size,
   title,
 }: {
   count: number;
   title: string;
-  size?: { sizeCode: number; displayValue: string };
 }) => {
-  return `${count} x ${title} ${size ? `in size ${size.displayValue}` : null}
+  return `${count} x ${title}
 `;
 };

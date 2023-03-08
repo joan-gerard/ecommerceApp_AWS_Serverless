@@ -19,7 +19,7 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
       return {
         count: item.count,
         title: itemData.title,
-        size: itemData.sizesAvailable.filter((size) => size.sizeCode == item.size)[0],
+        // size: itemData.sizesAvailable.filter((size) => size.sizeCode == item.size)[0],
       };
     });
 
@@ -46,13 +46,11 @@ We'll let you know when the order has been picked by our delivery partner!
 
 const itemToRow = ({
   count,
-  size,
   title,
 }: {
   count: number;
   title: string;
-  size?: { sizeCode: number; displayValue: string };
 }) => {
-  return `${count} x ${title} ${size ? `in size ${size.displayValue}` : null}
+  return `${count} x ${title}
 `;
 };

@@ -3,15 +3,21 @@ import { v4 as uuid } from 'uuid';
 
 import { formatJSONResponse } from '@libs/APIResponses';
 import Dynamo from '@libs/Dynamo';
-import { OrderRecord } from 'src/types/dynamo';
+import { Order, OrderRecord } from 'src/types/dynamo';
 
 export const handler = async (event: APIGatewayProxyEvent) => {
   try {
     const ordersTable = process.env.ordersTable;
-    const userId = event.requestContext?.authorizer?.claims?.sub;
-    const userEmail = event.requestContext?.authorizer?.claims?.email;
+    const userId: string = event.requestContext?.authorizer?.claims?.sub;
+    const userEmail : string= event.requestContext?.authorizer?.claims?.email;
 
-    const order = JSON.parse(event.body);
+    const order: Order = JSON.parse(event.body);
+
+    order.items.map((item) => {
+      if(!item.count) {
+        throw new Error(`Missing count for ${item.id}`)
+      }
+    });
 
     const timestamp = Date.now();
 
