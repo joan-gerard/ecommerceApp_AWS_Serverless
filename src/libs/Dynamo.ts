@@ -3,7 +3,6 @@ import {
   BatchWriteCommand,
   BatchWriteCommandInput,
   DeleteCommand,
-  DeleteCommandInput,
   GetCommand,
   PutCommand,
   PutCommandInput,
@@ -12,7 +11,6 @@ import {
   UpdateCommand,
   UpdateCommandInput,
   ScanCommand,
-  ScanCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 
 const ddbClient = new DynamoDBClient({});

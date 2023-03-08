@@ -18,10 +18,6 @@ const formatData = (sampleData) => {
     records.push(newItem);
   });
 
-
-  
-  console.log('FORMAT DATA ENDED', records);
-
   return records;
 };
 

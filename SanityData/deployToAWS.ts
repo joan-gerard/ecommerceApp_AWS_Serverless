@@ -18,8 +18,6 @@ const saveToDynamo = async ({ data, tableName }: { data: any[]; tableName: strin
     throw Error('incorrect environment parameter');
   }
 
-  console.log({ data, tableName, profile });
-
   await batch({
     data,
     tableName,
@@ -46,9 +44,8 @@ const batch = async ({
 
   // console.log('batch', AWS.config.credentials);
   const documentClient = new AWS.DynamoDB.DocumentClient(config);
-  console.log({ documentClient });
 
-  // const newData = 
+  // const newData =
   const formattedRecords = data.map((record) => {
     return {
       PutRequest: {
@@ -56,7 +53,6 @@ const batch = async ({
       },
     };
   });
-  console.log({ formattedRecords });
   try {
     while (formattedRecords.length > 0) {
       const batch = formattedRecords.splice(0, 15);
@@ -66,6 +62,8 @@ const batch = async ({
           [tableName]: batch,
         },
       };
+
+      console.log('BATCH DEPLOY', { batch });
 
       await documentClient.batchWrite(params).promise();
       console.log('batch written');

@@ -39,7 +39,7 @@ const functions: AWS['functions'] = {
       {
         schedule: {
           rate: ['cron(*/3 * * * ? *)'],
-          enabled: true,
+          enabled: false,
         },
       },
     ],
