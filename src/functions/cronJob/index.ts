@@ -27,8 +27,6 @@ export const handler = async () => {
     tableName: productTable,
   });
 
-  console.log({ sanityResults, existingDynamoData });
-
   // Compare data and get differences
   const selectedRows = sanityResults.filter(function (cv) {
     return !existingDynamoData.find(function (e) {
@@ -36,7 +34,6 @@ export const handler = async () => {
     });
   });
 
-  console.log(selectedRows);
   // DEPLOY TO AWS
   await deployToAWS(selectedRows);
 

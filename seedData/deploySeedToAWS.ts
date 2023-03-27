@@ -42,7 +42,6 @@ const batch = async ({
     region: 'eu-central-1',
     convertEmptyValues: true,
   };
-  console.log('credentials', AWS.config.credentials);
 
   const documentClient = new AWS.DynamoDB.DocumentClient(config);
 

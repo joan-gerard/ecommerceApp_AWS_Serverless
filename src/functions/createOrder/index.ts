@@ -9,13 +9,13 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   try {
     const ordersTable = process.env.ordersTable;
     const userId: string = event.requestContext?.authorizer?.claims?.sub;
-    const userEmail : string= event.requestContext?.authorizer?.claims?.email;
+    const userEmail: string = event.requestContext?.authorizer?.claims?.email;
 
     const order: Order = JSON.parse(event.body);
 
     order.items.map((item) => {
-      if(!item.count) {
-        throw new Error(`Missing count for ${item.id}`)
+      if (!item.count) {
+        throw new Error(`Missing count for ${item.id}`);
       }
     });
 
