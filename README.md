@@ -2,7 +2,7 @@
 
 An e-commerce backend with an event-driven architecture using AWS EventBridge (EB)
 
-### The Endpoints
+### Public Endpoints
 GET all products
 ```
 https://kiwpny70ba.execute-api.eu-central-1.amazonaws.com/dev/products
