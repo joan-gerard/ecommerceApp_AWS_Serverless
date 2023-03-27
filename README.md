@@ -14,6 +14,7 @@ https://kiwpny70ba.execute-api.eu-central-1.amazonaws.com/dev/product/{productID
 ### Live demo
 
 There is a deployed MVP [here](https://my-amazing-store.vercel.app/)
+
 Frontend repo [here](https://github.com/joan-gerard/ecommerceApp_AWS_Client)
 
 ### Project structure
