@@ -1,6 +1,6 @@
 # E-Commerce App - AWS Serverless
 
-An e-commerce backend with an event-driven architecture using AWS EventBridge
+An e-commerce backend with an event-driven architecture using AWS EventBridge (EB)
 
 ### The Endpoints
 
@@ -11,41 +11,47 @@ An e-commerce backend with an event-driven architecture using AWS EventBridge
 ### Project structure
 ```
 .
-├── ecomsanity                  # Connects Sanity to backend - contains config and schemas
+├── ecomsanity                  # Connects Sanity CMS to backend - contains config and schemas
 ├── SanityData                  # Folder containing functions supporting cronJob handler
-│   ├── deployToAWS             # Btach deploy to AWS DynamoDB 
+│   ├── deployToAWS             # Batch deploy new and updated Sanity products to AWS DynamoDB 
 │   ├── formatData              # Formats data to match DynamoDB schemas 
 │   └── SanityClient            # Sanity Client configuration 
 ├── serverless                  # Folder holding extra serverless configuration
-│   ├── dynamoResources         # DynamoDB table configuration 
-│   └── functions               # config pointing to handlers path and http method 
+│   ├── cognitoResources        # Cognito User Pool and User Pool Client configuration 
+│   ├── dynamodb                # DynamoDB table configuration 
+│   ├── functions               # Config pointing to Lambda handlers and their assigned events 
+│   └── secrets                 # AWS Secrets configuration
 ├── src
 │   ├── functions               # Folder containing lambda fn 
 │   │   ├── createOrder
-│   │   │   └── index.ts        # lambda querying on a dynamodb table
+│   │   │   └── index.ts        # Lambda handling POST request to Dynamo ordersTable with status 'order_placed'
 │   │   ├── cronJob
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   │   └── index.ts        # Scheduled task that fetches data from Sanity and batch deploys to Dynamo productsTable
 │   │   ├── deliveryOrderPicked
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   │   └── index.ts        # Handles POST request made by delivery service to notify that order has been shipped
 │   │   ├── getProduct
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   │   └── index.ts        # Lambda querying on Dynamo productsTable and returns a single product
 │   │   ├── getProducts
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   │   └── index.ts        # Lambda querying on Dynamo productsTable and return all products
 │   │   ├── streamHandler
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   │   └── index.ts        # Listens to any status changes made to Dynamo ordersTable records and then fans out EventBrdige events 
 │   │   ├── warehousePackingComplete
-│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
-│   │   └── ebEvents
-|   |       ├── ebOrderPackedCustomerNotification         # DynamoDB table configuration 
-|   |       ├── ebOrderPackedDeliveryNotification         # DynamoDB table configuration 
-|   |       ├── ebOrderPickedCustomerNotification         # DynamoDB table configuration 
-|   |       ├── ebOrderPlacedCustomerNotification         # DynamoDB table configuration 
-|   |       └── ebOrderPlacedWarehouseNotification        # config pointing to handlers path and http method 
+│   │   │   └── index.ts        # Handles POST request made by warehouse to notify that order has been packed
+│   │   └── ebEvents            # All EventBridge (EB) events
+│   │       ├── ebOrderPackedCustomerNotification         # Listens to 'warehouse_packed' status and notifies custmer (SNS)
+│   │       ├── ebOrderPackedDeliveryNotification         # Listens to 'warehouse_packed' status and POST to a fake delivery endpoint
+│   │       ├── ebOrderPickedCustomerNotification         # Listens to 'being_delivered' status and notifies custmer (SNS) 
+│   │       ├── ebOrderPlacedCustomerNotification         # Listens to 'order_placed' status and notifies custmer (SNS) 
+│   │       └── ebOrderPlacedWarehouseNotification        # Listens to 'order_placed' status and POST to a fake warehouse endpoint 
 │   │
-│   └── libs                    
-│       ├── dynamo.ts           # DynamoDB 'write', 'get' and 'query' functions
-│       └── apiGateway.ts       # API Gateway specific helpers
-│
+│   ├── libs                    
+│   │   ├── APIResponses.ts     # API Gateway specific helpers
+│   │   ├── Authorization.ts    # Handles warehouse's and delivery partner's authorization
+│   │   ├── Dynamo.ts           # DynamoDB CRUD operations helper functions
+│   │   ├── secrets.ts          # getSecret helper function
+│   │   └── SES.ts              # sendEmail helper function
+│   └── types
+│       └── dynamo.d.ts         # Global types
 ├── package.json
 ├── serverless.ts               # Serverless service file
 ├── tsconfig.json               # Typescript compiler configuration
