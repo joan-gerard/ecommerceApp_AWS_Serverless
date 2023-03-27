@@ -1,6 +1,6 @@
 # E-Commerce App - AWS Serverless
 
-An e-commerce app with an event-driven architecture using AWS EventBridge
+An e-commerce backend with an event-driven architecture using AWS EventBridge
 
 ### The Endpoints
 
@@ -11,6 +11,11 @@ An e-commerce app with an event-driven architecture using AWS EventBridge
 ### Project structure
 ```
 .
+├── ecomsanity                  # Connects Sanity to backend - contains config and schemas
+├── SanityData                  # Folder holding extra serverless configuration
+│   ├── deployToAWS             # DynamoDB table configuration 
+│   ├── formatData              # Formats data to match DynamoDB schemas 
+│   └── SanityClient            # Sanity Client configuration 
 ├── serverless                  # Folder holding extra serverless configuration
 │   ├── dynamoResources         # DynamoDB table configuration 
 │   └── functions               # config pointing to handlers path and http method 
