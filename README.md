@@ -12,8 +12,8 @@ An e-commerce backend with an event-driven architecture using AWS EventBridge
 ```
 .
 ├── ecomsanity                  # Connects Sanity to backend - contains config and schemas
-├── SanityData                  # Folder holding extra serverless configuration
-│   ├── deployToAWS             # DynamoDB table configuration 
+├── SanityData                  # Folder containing functions supporting cronJob handler
+│   ├── deployToAWS             # Btach deploy to AWS DynamoDB 
 │   ├── formatData              # Formats data to match DynamoDB schemas 
 │   └── SanityClient            # Sanity Client configuration 
 ├── serverless                  # Folder holding extra serverless configuration
@@ -21,12 +21,26 @@ An e-commerce backend with an event-driven architecture using AWS EventBridge
 │   └── functions               # config pointing to handlers path and http method 
 ├── src
 │   ├── functions               # Folder containing lambda fn 
-│   │   ├── ABC
+│   │   ├── createOrder
 │   │   │   └── index.ts        # lambda querying on a dynamodb table
-│   │   ├── DEF
+│   │   ├── cronJob
 │   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
-│   │   └── GHI
-│   │       └── index.ts        # lambda adding to dynamodb table
+│   │   ├── deliveryOrderPicked
+│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   ├── getProduct
+│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   ├── getProducts
+│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   ├── streamHandler
+│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   ├── warehousePackingComplete
+│   │   │   └── index.ts        # lambda making use of SES and SNS clients for notifications
+│   │   └── ebEvents
+|   |       ├── ebOrderPackedCustomerNotification         # DynamoDB table configuration 
+|   |       ├── ebOrderPackedDeliveryNotification         # DynamoDB table configuration 
+|   |       ├── ebOrderPickedCustomerNotification         # DynamoDB table configuration 
+|   |       ├── ebOrderPlacedCustomerNotification         # DynamoDB table configuration 
+|   |       └── ebOrderPlacedWarehouseNotification        # config pointing to handlers path and http method 
 │   │
 │   └── libs                    
 │       ├── dynamo.ts           # DynamoDB 'write', 'get' and 'query' functions
