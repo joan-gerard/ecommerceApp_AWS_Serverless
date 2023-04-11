@@ -19,10 +19,14 @@ export const handler = async (event: APIGatewayProxyEvent) => {
       }
     });
 
+    if (!order.paymentSessionId) {
+      throw new Error(`Missing paymentSessionId`);
+    }
+
     const timestamp = Date.now();
 
     const fullOrder: OrderRecord = {
-      id: uuid(),
+      id: order.paymentSessionId,
       pk: userId,
       sk: `order#${timestamp}`,
 
@@ -32,6 +36,8 @@ export const handler = async (event: APIGatewayProxyEvent) => {
       status: 'order_placed',
 
       items: order.items,
+      paymentSessionId: order.paymentSessionId,
+      orderId: uuid()
     };
 
     await Dynamo.write({
@@ -40,7 +46,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     });
 
     return formatJSONResponse({
-      body: { message: `Order placed --> ${fullOrder.id}` },
+      body: { message: `${fullOrder.orderId}` },
     });
   } catch (error) {
     console.log('error', error);

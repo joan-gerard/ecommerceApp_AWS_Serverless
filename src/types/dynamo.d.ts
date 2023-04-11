@@ -25,6 +25,7 @@ export interface Order {
     id: string;
     count: number;
   }[];
+  paymentSessionId: string;
 }
 
 export type OrderStatus =
@@ -45,6 +46,8 @@ export interface OrderRecord {
   warehousePacked?: Timestamp;
   deliveryPicked?: Timestamp;
   status: OrderStatus;
+  paymentSessionId: string;
+  orderId: string
 
   items: {
     id: ProductId;
