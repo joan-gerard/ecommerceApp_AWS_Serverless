@@ -29,7 +29,9 @@ export const handler = async (event: EventBridgeEvent<'string', OrderRecord>) =>
       email: orderDetails.userEmail,
       subject: 'Your order has been placed',
       text: `Thank you for placing your order. We're preparing it at our warehouse.
-      
+
+Your order number: ${orderDetails.orderId}
+
 Order Summary: 
 ${itemsDetails.map(itemToRow)}
 

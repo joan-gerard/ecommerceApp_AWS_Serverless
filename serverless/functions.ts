@@ -93,6 +93,18 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+  getOrders: {
+    handler: 'src/functions/getOrders/index.handler',
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'orders/{userId}',
+          cors: corsSettings,
+        },
+      },
+    ],
+  },
   streamHandler: {
     handler: 'src/functions/streamHandler/index.handler',
     events: [
